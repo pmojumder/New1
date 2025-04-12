@@ -1,15 +1,84 @@
-Testcase_ID	Table Name	Test Scenario	Test Case	Steps	Expected Result	Hive Query	Teradata Query	Minus Query (Comparison)
-TC_108	hr_sap_globoforce	Count Validation	Validate Record Count	1. Run COUNT(*) query in both Hive and Teradata.	Record counts should match	SELECT COUNT(*) FROM hr_sap_globoforce;	SELECT COUNT(*) FROM hr_sap_globoforce;	SELECT COUNT(*) FROM hive.hr_sap_globoforce MINUS SELECT COUNT(*) FROM teradata.hr_sap_globoforce;
-TC_109	hr_sap_globoforce	Sample Validation	Validate Sample Data	1. Compare 10 random records across both sources.	Data should match	SELECT * FROM hr_sap_globoforce LIMIT 10;	SELECT * FROM hr_sap_globoforce SAMPLE 10;	SELECT * FROM hive.hr_sap_globoforce MINUS SELECT * FROM teradata.hr_sap_globoforce;
-TC_110	hr_sap_iob_cpd_hours	Count Validation	Validate Record Count	1. Run COUNT(*) query in both Hive and Teradata.	Record counts should match	SELECT COUNT(*) FROM hr_sap_iob_cpd_hours;	SELECT COUNT(*) FROM hr_sap_iob_cpd_hours;	SELECT COUNT(*) FROM hive.hr_sap_iob_cpd_hours MINUS SELECT COUNT(*) FROM teradata.hr_sap_iob_cpd_hours;
-TC_111	hr_sap_iob_cpd_hours	Sample Validation	Validate Sample Data	1. Compare 10 random records across both sources.	Data should match	SELECT * FROM hr_sap_iob_cpd_hours LIMIT 10;	SELECT * FROM hr_sap_iob_cpd_hours SAMPLE 10;	SELECT * FROM hive.hr_sap_iob_cpd_hours MINUS SELECT * FROM teradata.hr_sap_iob_cpd_hours;
-TC_112	hr_sap_mcc_fandp_register	Count Validation	Validate Record Count	1. Run COUNT(*) query in both Hive and Teradata.	Record counts should match	SELECT COUNT(*) FROM hr_sap_mcc_fandp_register;	SELECT COUNT(*) FROM hr_sap_mcc_fandp_register;	SELECT COUNT(*) FROM hive.hr_sap_mcc_fandp_register MINUS SELECT COUNT(*) FROM teradata.hr_sap_mcc_fandp_register;
-TC_113	hr_sap_mcc_fandp_register	Sample Validation	Validate Sample Data	1. Compare 10 random records across both sources.	Data should match	SELECT * FROM hr_sap_mcc_fandp_register LIMIT 10;	SELECT * FROM hr_sap_mcc_fandp_register SAMPLE 10;	SELECT * FROM hive.hr_sap_mcc_fandp_register MINUS SELECT * FROM teradata.hr_sap_mcc_fandp_register;
-TC_114	hr_sap_monitoring_of_tasks	Count Validation	Validate Record Count	1. Run COUNT(*) query in both Hive and Teradata.	Record counts should match	SELECT COUNT(*) FROM hr_sap_monitoring_of_tasks;	SELECT COUNT(*) FROM hr_sap_monitoring_of_tasks;	SELECT COUNT(*) FROM hive.hr_sap_monitoring_of_tasks MINUS SELECT COUNT(*) FROM teradata.hr_sap_monitoring_of_tasks;
-TC_115	hr_sap_monitoring_of_tasks	Sample Validation	Validate Sample Data	1. Compare 10 random records across both sources.	Data should match	SELECT * FROM hr_sap_monitoring_of_tasks LIMIT 10;	SELECT * FROM hr_sap_monitoring_of_tasks SAMPLE 10;	SELECT * FROM hive.hr_sap_monitoring_of_tasks MINUS SELECT * FROM teradata.hr_sap_monitoring_of_tasks;
-TC_116	hr_sap_new_externals_infotype	Count Validation	Validate Record Count	1. Run COUNT(*) query in both Hive and Teradata.	Record counts should match	SELECT COUNT(*) FROM hr_sap_new_externals_infotype;	SELECT COUNT(*) FROM hr_sap_new_externals_infotype;	SELECT COUNT(*) FROM hive.hr_sap_new_externals_infotype MINUS SELECT COUNT(*) FROM teradata.hr_sap_new_externals_infotype;
-TC_117	hr_sap_new_externals_infotype	Sample Validation	Validate Sample Data	1. Compare 10 random records across both sources.	Data should match	SELECT * FROM hr_sap_new_externals_infotype LIMIT 10;	SELECT * FROM hr_sap_new_externals_infotype SAMPLE 10;	SELECT * FROM hive.hr_sap_new_externals_infotype MINUS SELECT * FROM teradata.hr_sap_new_externals_infotype;
-TC_118	hr_sap_org_assignment	Count Validation	Validate Record Count	1. Run COUNT(*) query in both Hive and Teradata.	Record counts should match	SELECT COUNT(*) FROM hr_sap_org_assignment;	SELECT COUNT(*) FROM hr_sap_org_assignment;	SELECT COUNT(*) FROM hive.hr_sap_org_assignment MINUS SELECT COUNT(*) FROM teradata.hr_sap_org_assignment;
-TC_119	hr_sap_org_assignment	Sample Validation	Validate Sample Data	1. Compare 10 random records across both sources.	Data should match	SELECT * FROM hr_sap_org_assignment LIMIT 10;	SELECT * FROM hr_sap_org_assignment SAMPLE 10;	SELECT * FROM hive.hr_sap_org_assignment MINUS SELECT * FROM teradata.hr_sap_org_assignment;
-TC_120	hr_sap_org_assignment_test	Count Validation	Validate Record Count	1. Run COUNT(*) query in both Hive and Teradata.	Record counts should match	SELECT COUNT(*) FROM hr_sap_org_assignment_test;	SELECT COUNT(*) FROM hr_sap_org_assignment_test;	SELECT COUNT(*) FROM hive.hr_sap_org_assignment_test MINUS SELECT COUNT(*) FROM teradata.hr_sap_org_assignment_test;
-TC_121	hr_sap_org_assignment_test	Sample Validation	Validate Sample Data	1. Compare 10 random records across both sources.	Data should match	SELECT * FROM hr_sap_org_assignment_test LIMIT 10;	SELECT * FROM hr_sap_org_assignment_test SAMPLE 10;	SELECT * FROM hive.hr_sap_org_assignment_test MINUS SELECT * FROM teradata.hr_sap_org_assignment_test;
+package com.automation.Pages;
+
+import java.util.List;
+
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.automation.Utilis.DriverUtilis;
+
+import io.cucumber.datatable.DataTable;
+
+public class HomePage extends BasePage {
+	@FindBy(id = "branding")
+
+	private WebElement successErrorMsg;
+
+	@FindBy(xpath = "//a[@class='help-icon-div']")
+	private WebElement questionField;
+
+	@FindBy(xpath = "//img[@alt='Mobile app QR code']")
+	private WebElement imgQRcode;
+
+	@FindBy(xpath = "//table[@id='table1']/tbody/tr")
+	private List<WebElement> rowSize;
+	@FindBy(xpath = "//b[text()='Admin']")
+	private WebElement btnAdmin;
+
+	@FindBy(xpath = "//a[@id='menu_admin_UserManagement']")
+	private WebElement btnUserManagement;
+
+	@FindBy(xpath = "//a[text()='Users']")
+	private WebElement btnUsers;
+	@FindBy(xpath = "//input[@id='btnAdd']")
+	private WebElement buttonAdd;
+
+	final String XPATH_DataTable = "//table[@id='table1']/tbody/tr[%s]/td[not(./a)]";
+
+	public void verifyLoginSuccessful() throws InterruptedException {
+		/*
+		 * WebDriverWait wait=new WebDriverWait(DriverUtilis.getDriver(), 10);
+		 * wait.until(ExpectedConditions.titleIs(successErrorMsg));
+		 */
+		Assert.assertTrue("Login Not Successful", successErrorMsg.isDisplayed());
+	}
+
+	public void clickQuestionMark() {
+		questionField.click();
+		Assert.assertTrue("QR Code Not Present", imgQRcode.isDisplayed());
+	}
+
+	public void verifyDataTable(DataTable dataTable) throws InterruptedException {
+		List<List<String>> expData = dataTable.asLists();
+		for (int i = 0; i < expData.size(); i++) {
+			String finalloc = String.format(XPATH_DataTable, i + 1);
+			List<WebElement> dataList = driver.findElements(By.xpath(finalloc));
+			for (int j = 0; j < expData.get(i).size(); j++) {
+				String expectedData = expData.get(i).get(j);
+				String actualData = dataList.get(j).getText();
+				Thread.sleep(3000);
+				Assert.assertEquals(expectedData, actualData);
+			}
+		}
+
+	}
+
+	public void clickUserManagement() {
+
+		Actions act = new Actions(driver);
+		act.moveToElement(btnAdmin).moveToElement(btnUserManagement).build().perform();
+		btnUsers.click();
+		buttonAdd.click();
+
+	}
+
+	public void clickAddButton() {
+		buttonAdd.click();
+	}
+
+}
