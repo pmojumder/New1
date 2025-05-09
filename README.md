@@ -15,20 +15,29 @@ ELSE 'CI'
 END AS CCR_CNTRACT_TYP"			"DDEWV50P
 DDEWV50P"	"ENT_ACCOUNT_PERIODIC_FACT
 CCR_CNTRACT_TYP_REF"						
-Feature: Test the addition of extra columns to table MAS_APPLICATION_DETAIL
-                
-  Scenario: Back up the existing table and create the modified table
-    Given the table MAS_APPLICATION_DETAIL exists 
-      | SRCE_APPL_ID | AUTO_ISS_LOO_IND  | 
-      | 25191788     | N                 | 
-    When the mainframe job EWT01FFF runs
+----
+Feature: Test the transformation of CCR_CNTRACT_TYP in ENT_ACCOUNT_PERIODIC_FACT using CCR_CNTRACT_TYP_REF
+
+  Scenario: Validate CCR_CNTRACT_TYP mapping with reference table fallback
+    Given the table ENT_ACCOUNT_PERIODIC_FACT exists
+      | SRCE_INST | SRCE_SYS | SRCE_PROD_CDE_FK | CR_PORTF_FK | PROD_SUMM_DESCR |
+      | 1         | 1359     | 301              | RETL        | PERSONAL LOAN   |
+      | 9         | 60       | 401              | BTL         | HOME LOAN       |
+      | 9         | 50       | 402              | RETL        | PERSONAL LOAN   |
+      | 5         | 22       | 701              | RETL        | AUTO LOAN       |
+
+    And the table CCR_CNTRACT_TYP_REF exists
+      | SRCE_INST | SRCE_SYS | SRCE_PROD_CDE | CCR_CNTRACT_TYP |
+      | 5         | 22       | 701           | CN              |
+
+    When the job EWM01CP0 runs
     Then the results of job execution are successful
-                
-    And the table MAS_APPLICATION_DETAIL contains the data
-      | SRCE_APPL_ID | AUTO_ISS_LOO_IND  | INCL_INCOME_FOR_ASSESSMENT | LENDING_POLICY_EXP_SOUGHT | TWO_OR_MORE_MORTGAGED_BTL |
-      | 25191788     | N                 | NULL                       | NULL                      | NULL                      |
-                
-    And the table MAS_APPLICATION_DETAIL should match its definition in MAS_APPLICATION_DETAIL_BRD.xlsx,MAS_APPLICATION_DETAIL
-    And the table MAS_APPLICATION_DETAIL contains the data
-      | SRCE_APPL_ID | AUTO_ISS_LOO_IND  | INCL_INCOME_FOR_ASSESSMENT | LENDING_POLICY_EXP_SOUGHT | TWO_OR_MORE_MORTGAGED_BTL |
-      | 25191788     | N                 | NULL                       | NULL                      | NULL                      |
+
+    And the table ENT_ACCOUNT_PERIODIC_FACT contains the data
+      | SRCE_INST | SRCE_SYS | SRCE_PROD_CDE_FK | CCR_CNTRACT_TYP |
+      | 1         | 1359     | 301              | CN              |
+      | 9         | 60       | 401              | CN              |
+      | 9         | 50       | 402              | CN              |
+      | 5         | 22       | 701              | CN              |
+
+    And the table ENT_ACCOUNT_PERIODIC_FACT should match its definition in ENT_ACCOUNT_PERIODIC_FACT_BRD.xlsx,ENT_ACCOUNT_PERIODIC_FACT
