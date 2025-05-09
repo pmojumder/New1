@@ -15,3 +15,20 @@ ELSE 'CI'
 END AS CCR_CNTRACT_TYP"			"DDEWV50P
 DDEWV50P"	"ENT_ACCOUNT_PERIODIC_FACT
 CCR_CNTRACT_TYP_REF"						
+Feature: Test the addition of extra columns to table MAS_APPLICATION_DETAIL
+                
+  Scenario: Back up the existing table and create the modified table
+    Given the table MAS_APPLICATION_DETAIL exists 
+      | SRCE_APPL_ID | AUTO_ISS_LOO_IND  | 
+      | 25191788     | N                 | 
+    When the mainframe job EWT01FFF runs
+    Then the results of job execution are successful
+                
+    And the table MAS_APPLICATION_DETAIL contains the data
+      | SRCE_APPL_ID | AUTO_ISS_LOO_IND  | INCL_INCOME_FOR_ASSESSMENT | LENDING_POLICY_EXP_SOUGHT | TWO_OR_MORE_MORTGAGED_BTL |
+      | 25191788     | N                 | NULL                       | NULL                      | NULL                      |
+                
+    And the table MAS_APPLICATION_DETAIL should match its definition in MAS_APPLICATION_DETAIL_BRD.xlsx,MAS_APPLICATION_DETAIL
+    And the table MAS_APPLICATION_DETAIL contains the data
+      | SRCE_APPL_ID | AUTO_ISS_LOO_IND  | INCL_INCOME_FOR_ASSESSMENT | LENDING_POLICY_EXP_SOUGHT | TWO_OR_MORE_MORTGAGED_BTL |
+      | 25191788     | N                 | NULL                       | NULL                      | NULL                      |
