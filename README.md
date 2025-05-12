@@ -103,3 +103,100 @@ CCR_ACCOUNT_PERIODIC		SRCE_INST                     		ENT_ACCOUNT_PERIODIC_FACT
 CCR_ACCOUNT_PERIODIC		LOAD_LAST_ACTION              	I	Default
 CCR_ACCOUNT_PERIODIC		LOAD_DTE                      		Default
 CCR_ACCOUNT_PERIODIC		LOAD_TIME                     		Default
+
+
+
+Feature: Validate data load and transformation for CCR_ACCOUNT_PERIODIC via EWM01CP0
+
+  Background:
+    Given the ETL job "EWM01CP0" has completed successfully
+    And data is available in source and target tables
+
+  Rule: All mandatory columns in CCR_ACCOUNT_PERIODIC should not be null
+    Scenario: Validate presence of data in mandatory fields
+      When the "CCR_ACCOUNT_PERIODIC" table is queried
+      Then none of the following columns should have NULL values:
+        | Column Name              |
+        | WH_ACC_NO               |
+        | ACC_NO                  |
+        | CCR_CNTRACT_TYP         |
+        | ACC_SETUP_DTE           |
+        | SRCE_PROD_CDE_FK        |
+        | SECTOR_CDE_FK           |
+        | BSL_DAYS_PAST_DUE       |
+        | MATURITY_DTE            |
+        | DR_INT_CAT              |
+        | DR_INT_RTE              |
+        | FIRST_TRANS_DTE         |
+        | ISO_CRNCY_CDE           |
+        | CCR_Restructure_EVENT   |
+        | RPMT_DUE_AMT_E          |
+        | TOT_ARREARS_AMT_E       |
+        | CR_PORTF_FK             |
+        | NEXT_RPMT_DTE           |
+        | CCR_FIN_AMT_AFTER_CONV  |
+        | NET_LIMIT_FOR_PRNCPL_E  |
+        | BAL_AMOUNT_E            |
+        | OUTSTDG_BAL_AMT         |
+        | OUTSTDG_PMT_NO          |
+        | AMT_PSTD                |
+        | NO_OF_PMT_PSTD          |
+        | RPMT_DUE_AMT_CRIF       |
+        | CCR_IND                 |
+        | CLOSE_DTE               |
+        | CNTRCT_PHASE            |
+        | CCR_PROVIDER_CDE        |
+        | PROD_NAME               |
+        | PROD_SUMM_DESCR         |
+        | PROD_GRP_DESCR          |
+        | FIX_FLOATING_IND        |
+        | CCR_CREDIT_STATUS       |
+        | TERM_NO_UNITS           |
+        | TOT_INSTALMT_PMT_FREQ_CDE |
+        | PMT_FREQ                |
+        | TOT_NO_OF_PLANNED_PYMTS |
+        | PMT_MTHD                |
+        | CCR_EXCL_IND            |
+        | FIN_AMT_LAYER_FLAG      |
+        | REORG_IND               |
+        | EXPOS_CLASS             |
+        | PURPOSE_CREDIT_TYP      |
+        | PMT_MADE_AMT            |
+        | PMT_MADE_DTE            |
+        | MOF_LINK_CDE            |
+        | ACC_NO_DERV             |
+        | CCR_REPORTED_DTE        |
+        | PERIOD_DTE              |
+        | SRCE_SYS                |
+        | SRCE_INST               |
+        | LOAD_LAST_ACTION        |
+        | LOAD_DTE                |
+        | LOAD_TIME               |
+
+  Rule: Validate CCR_CNTRACT_TYP business rules
+
+    Scenario: Rule 1 - SRCE_INST = 1 and SRCE_SYS = 1359 with specific product and portfolio conditions
+      Given a record in CCR_ACCOUNT_PERIODIC with SRCE_INST = 1 and SRCE_SYS = 1359
+      And SRCE_PROD_CDE_FK starts with '3' or '4'
+      And CR_PORTF_FK not in ["PDH", "BTL"]
+      And PROD_SUMM_DESCR not in ["PROPERTY FINANCE", "HOME LOAN"]
+      Then CCR_CNTRACT_TYP should be "CN"
+
+    Scenario: Rule 2 - SRCE_INST = 9 and SRCE_SYS = 60
+      Given a record in CCR_ACCOUNT_PERIODIC with SRCE_INST = 9 and SRCE_SYS = 60
+      Then CCR_CNTRACT_TYP should be "CN"
+
+    Scenario: Rule 3 - SRCE_INST = 9 and CR_PORTF_FK not in ["PDH", "BTL"]
+      Given a record in CCR_ACCOUNT_PERIODIC with SRCE_INST = 9
+      And CR_PORTF_FK not in ["PDH", "BTL"]
+      Then CCR_CNTRACT_TYP should be "CN"
+
+    Scenario: Rule 4 - Match reference from CNTRCT_TYP table
+      Given a record in CCR_ACCOUNT_PERIODIC
+      When SRCE_INST, SRCE_SYS, and SRCE_PROD_CDE_FK match a record in CNTRCT_TYP
+      Then CCR_CNTRACT_TYP should be set to CNTRCT_TYP.CCR_CNTRACT_TYP
+
+    Scenario: Rule 5 - Fallback default
+      Given a record in CCR_ACCOUNT_PERIODIC that does not meet any specific rule
+      Then CCR_CNTRACT_TYP should be "CI"
+
