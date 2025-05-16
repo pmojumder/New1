@@ -58,3 +58,8 @@ Feature: Validate carry-forward records in CCR_ACCOUNT_PERIODIC
     And the record meets business criteria for carry-forward
     Then the current month’s CCR_ACCOUNT_PERIODIC should contain this record
     And all key fields (e.g., CCR_CNTRACT_TYP, ACC_SETUP_DTE, PROD_NAME, etc.) should match the previous month
+
+
+
+
+    Would it be possible for you to run the CCR_ACCOUNT_PERIODIC job into a test table for us for March or April month end? I was hoping that maybe you could do this on Monday morning and I could then take backups of that days daily tables so we would have the full source data used for the run and the result for reference building up the test data? I think it would be beneficial for us as now with some values sourced from daily data and even the likes of ECAP potentially moving on post WD3 run of CCR we would know 100% what the source data was.
