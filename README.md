@@ -44,3 +44,7 @@ Source Field: ACC_SETUP_DTE
 
 Target Table: CCR_ACCOUNT_PERIODIC
 Target Field: ACC_SETUP_DTE
+----------------------------------------------
+
+
+Hey Plabani - I am just looking at the logic there and there is an insert there to carry forward records from the previois month's CCR_ACCOUNT_PERIODIC if they aren't added by the logic for the current month and some other criteria there too. Thinking it's probably best to handle this kind of record on it's own in a Feature checking all columns rather than including it in individual column tests if that makes sense?
