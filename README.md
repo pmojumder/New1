@@ -1,52 +1,17 @@
-import os
-import pandas as pd
-import logging
-import traceback
-from utils import DataUtility
-from behave import given
-
-# Initialize logger
-logger = logging.getLogger(__name__)
-
-###############################################################################
-# LOAD TABLE DATA  WHEN ENTIRE DATA RESIDE IN EXCEL SHEET AND ONE  MAINE SHEET#
-###############################################################################
-@given('Load all {corporate_entity} tables from {excel_file},{sheet_name}')
-def step_load_all_data_from_excel(context, corporate_entity, excel_file, sheet_name):
-    """
-    Behave step for loading all tables from a specific sheet.
-    """
-    sub_directory = corporate_entity
-    excel_file = os.path.join(context.insert_table_excel_base_path, excel_file)
-    loader = DataUtility(context, sub_directory)
-    loader.load_excel_file(excel_file, sheet_name)
-
-
-###############################################################################################
-# LOAD TABLE DATA  WHEN MAIN TAB HAS LIST OF ALL SOURCE SHEETS AND EACH SHEET HAS DATA        #
-###############################################################################################
-@given('Load the {corporate_entity} tables from excel file {file_name} and the main tab {main_tab}')
-def step_given_process_excel(context, corporate_entity, file_name, main_tab):
-    """
-    Behave step for loading tables from multiple sheets listed in the main tab.
-    """
-    base_path = context.insert_table_excel_base_path.strip().strip('"')
-    file_name = file_name.strip().strip('"')
-    excel_file = os.path.join(base_path, file_name)
-    sub_directory = corporate_entity
-
-    try:
-        # Load the Excel file
-        excel_data = pd.ExcelFile(excel_file)
-
-        # Parse the main tab to get the list of sheet names
-        main_tab_data = excel_data.parse(main_tab)
-        sheet_names = main_tab_data['Tabs'].tolist()  # Adjust column name as per your Excel file structure
-
-        # Process each sheet
-        loader = DataUtility(context, sub_directory)
-        for sheet_name in sheet_names:
-            loader.load_excel_file(excel_file, sheet_name)
-    except Exception as ex:
-        logger.error(f"An error occurred: {ex}")
-        logger.error(traceback.format_exc())
+Requirement already satisfied: behave in c:\products\prj\.venv\lib\site-packages (from -r requirements.txt (line 1)) (1.2.6)
+Requirement already satisfied: python-dotenv in c:\products\prj\.venv\lib\site-packages (from -r requirements.txt (line 2)) (1.0.1)
+Requirement already satisfied: teradatasql in c:\products\prj\.venv\lib\site-packages (from -r requirements.txt (line 3)) (20.0.0.24)
+Requirement already satisfied: behave-html-formatter in c:\products\prj\.venv\lib\site-packages (from -r requirements.txt (line 4)) (0.9.10)
+Requirement already satisfied: requests in c:\products\prj\.venv\lib\site-packages (from -r requirements.txt (line 5)) (2.32.3)
+Requirement already satisfied: openpyxl in c:\products\prj\.venv\lib\site-packages (from -r requirements.txt (line 6)) (3.1.5)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1028)'))': /simple/pandas/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1028)'))': /simple/pandas/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1028)'))': /simple/pandas/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1028)'))': /simple/pandas/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1028)'))': /simple/pandas/
+Could not fetch URL https://pypi.org/simple/pandas/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retr
+ies exceeded with url: /simple/pandas/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1028)'))) - skipping
+ERROR: Could not find a version that satisfies the requirement pandas==2.2.2 (from versions: none)
+ERROR: No matching distribution found for pandas==2.2.2
+Could not fetch URL https://pypi.org/simple/pip/: There was a problem confirming the ssl certificate: HTTPSConnectionPool(host='pypi.org', port=443): Max retries
+ exceeded with url: /simple/pip/ (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1028)'))) - skipping
