@@ -1,19 +1,34 @@
-Feature: Test the new Tier 2 CPVT_AIB_NPE_VAL_ALERT # features/06_poc.feature:1
-  As an EDW engineer,
-  I want to validate that CPVT_AIB_NPE_VAL_ALERT table is created and loaded correctly.
-  @create
-  Scenario: Test table CPVT_AIB_NPE_VAL_ALERT is created correctly  # features/06_poc.feature:6
-    Given the table CPVT_AIB_NPE_VAL_ALERT does not exists          # features/steps/gherkin.py:78
-      Traceback (most recent call last):
-        File "C:\Products\prj\.venv\Lib\site-packages\behave\model.py", line 1329, in run
-          match.run(runner.context)
-          ~~~~~~~~~^^^^^^^^^^^^^^^^
-        File "C:\Products\prj\.venv\Lib\site-packages\behave\matchers.py", line 98, in run
-          self.func(context, *args, **kwargs)
-          ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File "features\steps\gherkin.py", line 80, in check_table_exists
-          context.tables_to_drop.append(table_name)
-          ^^^^^^^^^^^^^^^^^^^^^^
-        File "C:\Products\prj\.venv\Lib\site-packages\behave\runner.py", line 321, in __getattr__
-          raise AttributeError(msg)
-      AttributeError: 'Context' object has no attribute 'tables_to_drop'
+import os
+from dotenv import load_dotenv, find_dotenv
+from steps.utils import MainframeApiService, PDSProcessor
+from environment import DDLDownloader
+import traceback
+import shutil
+
+# Load environment variables from the .env file
+load_dotenv(find_dotenv())
+
+try:
+    api_base_url = os.getenv('API_BASE_URL')
+    api_username = os.getenv('ZOWE_API_USERNAME')
+    api_password = os.getenv('ZOWE_API_PASSWORD')
+    ddl_path = os.getenv('DDL_PATH')
+
+    if not all([api_base_url, api_username, api_password, ddl_path]):
+        raise ValueError("Missing one or more required environment variables.")
+
+    if os.path.exists(ddl_path):
+        shutil.rmtree(ddl_path)
+        print(f"Old DDL path {ddl_path} deleted succesfully.")
+
+    submitter = MainframeApiService(api_username, api_password, api_base_url)
+    pdsprocessor = PDSProcessor(base_directory=ddl_path)
+
+    download_ddl = DDLDownloader(submitter, processor=pdsprocessor)
+    download_ddl.download_ddl_files()
+
+    print("DDL download completed successfully.")
+except Exception as e:
+    print(f"An error occurred: {e} {traceback.format_exc()}")
+
+
