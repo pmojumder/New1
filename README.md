@@ -1,50 +1,23 @@
-✅ 3-4. Guest List
-python
-Copy
-Edit
-# Exercise 3-4: Guest List
-
-guest_list = ["Albert Einstein", "Maya Angelou", "Leonardo da Vinci"]
-
-# Send invitation messages
-print("Dear " + guest_list[0] + ", would you like to join me for dinner?")
-print("Dear " + guest_list[1] + ", would you like to join me for dinner?")
-print("Dear " + guest_list[2] + ", would you like to join me for dinner?")
-✅ 3-5. Changing Guest List
-python
-Copy
-Edit
-# Exercise 3-5: One guest can't make it
-
-# Original guest list
-guest_list = ["Albert Einstein", "Maya Angelou", "Leonardo da Vinci"]
-
-# One guest can't make it
-print(guest_list[1] + " can't make it to the dinner.")
-
-# Replace the guest
-guest_list[1] = "Marie Curie"
-
-# Send new invitations
-print("Dear " + guest_list[0] + ", would you like to join me for dinner?")
-print("Dear " + guest_list[1] + ", would you like to join me for dinner?")
-print("Dear " + guest_list[2] + ", would you like to join me for dinner?")
-✅ 3-6. More Guests
-python
-Copy
-Edit
-# Exercise 3-6: Found a bigger dinner table
-
-# Start from updated guest list from 3-5
-guest_list = ["Albert Einstein", "Marie Curie", "Leonardo da Vinci"]
-
-print("Good news! I found a bigger dinner table.")
-
-# Add new guests
-guest_list.insert(0, "Nikola Tesla")               # Beginning
-guest_list.insert(2, "Ada Lovelace")               # Middle
-guest_list.append("Stephen Hawking")               # End
-
-# Send updated invitations
-for guest in guest_list:
-    print("Dear " + guest + ", would you like to join me for dinner?")
+Save each of the following exercises as a separate file with a name like 
+name_cases.py. If you get stuck, take a break or see the suggestions in 
+Appendix C.
+2-3. Personal Message: Use a variable to represent a person’s name, and print 
+a message to that person. Your message should be simple, such as, “Hello Eric, 
+would you like to learn some Python today?”
+2-4. Name Cases: Use a variable to represent a person’s name, and then print 
+that person’s name in lowercase, uppercase, and title case.
+2-5. Famous Quote: Find a quote from a famous person you admire. Print the 
+quote and the name of its author. Your output should look something like the 
+following, including the quotation marks:
+Albert Einstein once said, “A person who never made a 
+mistake never tried anything new.”
+2-6. Famous Quote 2: Repeat Exercise 2-5, but this time, represent the 
+famous person’s name using a variable called famous_person. Then compose 
+your message and represent it with a new variable called message. Print your 
+message.
+2-7. Stripping Names: Use a variable to represent a person’s name, and include 
+some whitespace characters at the beginning and end of the name. Make sure 
+you use each character combination, "\t" and "\n", at least once.
+Print the name once, so the whitespace around the name is displayed. 
+Then print the name using each of the three stripping functions, lstrip(), 
+rstrip(), and strip().
